@@ -1,0 +1,73 @@
+﻿@model List<Blog>
+
+
+<div class="container">
+	<div class="row">
+
+		<div class="row">
+			<div class="col-2">
+				<a class="btn btn-success" asp-controller="Blog" asp-action="Create">Create</a>
+
+			</div>
+
+		</div>
+
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th scope="col">Id</th>
+					<th scope="col">Title</th>
+					<th scope="col">Text</th>
+					<th scope="col">Employee</th>
+					<th scope="col">PostedDate</th>
+					<th scope="col">Image</th>
+				</tr>
+			</thead>
+			<tbody>
+
+
+				@foreach (var item in Model)
+				{
+					<tr>
+						<th scope="row">@item.Id</th>
+						<td>@item.Title</td>
+						<td>@item.Text</td>
+						<td>@item.Employee.FirstName @item.Employee.LastName</td>
+						<td>@item.PostedDate</td>
+
+						<td>
+							<img src="~/assets/images/@item.ImageName" alt="@item.Title" width="40" />
+						</td>
+
+						@* 						<td>
+							<a asp-action="Update" asp-route-id="@item.Id" class="btn btn-warning"> Update</a>
+							<a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+
+						</td> *@
+
+
+						<td style="border: 1px solid #ddd; padding: 8px;">
+							<a asp-action="Update" asp-route-id="@item.Id" style="padding: 4px 8px; background-color:yellow">Update</a>
+							<a asp-action="Delete" asp-route-id="@item.Id" style="padding: 4px 8px; background-color:Red">Delete</a>
+
+
+						</td>
+
+
+						)
+
+
+					</tr>
+				}
+
+			</tbody>
+
+
+		</table>
+
+	</div>
+
+</div>
+
+
+

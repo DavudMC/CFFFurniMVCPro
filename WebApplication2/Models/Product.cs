@@ -1,14 +1,19 @@
-﻿namespace WebApplication2.Models
+﻿using System.ComponentModel.DataAnnotations;
+using WebApplication2.Models.Common;
+
+namespace WebApplication2.Models
 {
-    public class Product
+    public class Product : BaseEntity
     {
-        public int Id { get; set; }
+        [Required]
+        [MinLength(2)]
         public string Name { get; set; }
+        [Required]
         public decimal Price { get; set; }
+        [Required]
         public string ImageName { get; set; }
-        public string ImageUrl { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime? UpdatedDate { get; set; }
-        public bool IsDeleted { get; set; }
+        public string? ImageUrl { get; set; }
+
+        public bool? IsDeleted { get; set; }
     }
 }

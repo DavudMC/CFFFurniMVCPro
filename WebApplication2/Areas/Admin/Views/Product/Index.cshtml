@@ -1,0 +1,91 @@
+﻿@model List<Product>
+
+
+<div class="container">
+	<div class="row">
+
+		<div class="row">
+			<div class="col-2">
+				<a class="btn btn-success" asp-controller="Product" asp-action="Create">Create</a>
+
+			</div>
+
+		</div>
+
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th scope="col">Id</th>
+					<th scope="col">Name</th>
+					<th scope="col">Price</th>
+					<th scope="col">Image</th>
+				</tr>
+			</thead>
+			<tbody>
+
+
+				@foreach (var item in Model)
+				{
+					<tr>
+						<th scope="row">@item.Id</th>
+						<td>@item.Name</td>
+						<td>@item.Price</td>
+						<td>
+							<img src="~/assets/images/@item.ImageName" alt="@item.Name" width="40" />
+						</td>
+
+@* 						<td>
+							<a asp-action="Update" asp-route-id="@item.Id" class="btn btn-warning"> Update</a>
+							<a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+
+						</td> *@
+
+							@if (item.IsDeleted == true)
+							{
+							<td style="border: 1px solid #ddd; padding: 8px">Deactive</td>
+						}
+						else
+						{
+							<td style="border: 1px solid #ddd; padding: 8px;">Active</td>
+						}
+
+
+						<td style="border: 1px solid #ddd; padding: 8px;">
+							<a asp-action="Update" asp-route-id="@item.Id" style="padding: 4px 8px; background-color:yellow" >Update</a>
+							<a asp-action="Delete" asp-route-id="@item.Id" style="padding: 4px 8px; background-color:Red" >Delete</a>
+							<a asp-action="Toggle" asp-route-id="@item.Id" style="padding 4px 8px;">
+								
+								@if (item.IsDeleted == true)
+								{
+									<span>Recover</span>
+								}
+								else
+								{
+									<span>Soft Delete</span>
+								}
+
+							</a>
+
+
+
+						</td>
+
+
+
+
+						)
+
+
+					</tr>
+				}
+
+			</tbody>
+
+
+		</table>
+
+	</div>
+
+</div>
+
+

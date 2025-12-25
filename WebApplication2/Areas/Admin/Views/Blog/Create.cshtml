@@ -1,0 +1,48 @@
+﻿@model Blog
+
+
+
+<div class="container">
+	<div class="row">
+		<form method="post" asp-action="Create" asp-controller="Blog">
+			<div class="form-group">
+				<label for="Title">Title</label>
+				<input asp-for="Title" class="form-control" id="Title" placeholder="Title">
+				<span asp-validation-for="Title" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label for="Text">Text</label>
+				<input asp-for="Text" class="form-control" id="Text" placeholder="Text">
+				<span asp-validation-for="Text" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label for="ImageName">ImageName</label>
+				<input asp-for="ImageName" class="form-control" id="ImageName" placeholder="ImageName">
+				<span asp-validation-for="ImageName" class="text-danger"> </span>
+			</div>
+			<div class="form-group">
+				<label for="PostedDate">PostedDate</label>
+				<input asp-for="PostedDate" class="form-control" id="PostedDate" placeholder="PostedDate">
+				<span asp-validation-for="PostedDate" class="text-danger"> </span>
+			</div>
+			<div class="form-group">
+
+				<select asp-for="EmployeeId">
+					@foreach (Employee emp in ViewBag.Employees)
+					{
+						<option value="@emp.Id">@emp.FirstName @emp.LastName</option>
+
+					}
+
+				</select>
+
+			</div>
+
+
+			<button type="submit" class="btn btn-primary">Submit</button>
+		</form>
+
+
+	</div>
+
+
