@@ -4,11 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication2.Context;
 using WebApplication2.Models;
+using WebApplication2.ViewModels.BlogViewModel;
 
 namespace WebApplication2.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class BlogController(AppDbContext context) : Controller
+    public class BlogController(AppDbContext context, IWebHostEnvironment enviroment) : Controller
     {
         public async Task<IActionResult> Index()
         {
@@ -90,15 +91,44 @@ namespace WebApplication2.Areas.Admin.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public async Task<IActionResult> Create(Blog blog)
+        public async Task<IActionResult> Create(CreateBlogVm vm)
         {
+            await GetEmployeeWithViewBag();
+
             if (!ModelState.IsValid)
             {
-                var employees = await context.Employees.ToListAsync();
-                ViewBag.Employees = employees;
                 return View();
             }
 
+            if (vm.Image.ContentType.Contains("Image"))
+            {
+                ModelState.AddModelError("Image", "Please select image file");
+                return View();
+            }
+
+            if(vm.Image.Length > 2 *1024 * 1024)
+            {
+                ModelState.AddModelError("Image", "Image size must be less than 2MB");
+                return View();
+            }
+
+            string uniqueImageName = Guid.NewGuid().ToString() + vm.Image.FileName;
+            var imagePath = Path.Combine(enviroment.WebRootPath, "assets", "images", uniqueImageName);
+
+            using var stream = new FileStream(imagePath, FileMode.Create);
+            await vm.Image.CopyToAsync(stream);
+
+
+            var blog = new Blog
+            {
+                Title = vm.Title,
+                Text = vm.Text,
+                EmployeeId = vm.EmployeeId,
+                PostedDate = vm.PostedDate,
+                ImageName = uniqueImageName,
+                CreatedDate = DateTime.Now,
+                ImageUrl = imagePath,
+            };
 
             blog.CreatedDate = DateTime.Now;
             await context.Blogs.AddAsync(blog);
@@ -106,6 +136,10 @@ namespace WebApplication2.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
-
+        private async Task GetEmployeeWithViewBag()
+        {
+            var employees = await context.Employees.ToListAsync();
+            ViewBag.Employees = employees;
+        }
     }
 }

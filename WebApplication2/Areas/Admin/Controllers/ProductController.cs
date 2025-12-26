@@ -1,13 +1,15 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication2.Context;
 using WebApplication2.Models;
+using WebApplication2.ViewModels.ProductViewModel;
 
 namespace WebApplication2.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class ProductController(AppDbContext _context) : Controller
+    public class ProductController(AppDbContext _context, IWebHostEnvironment environment) : Controller
     {
         public async Task<IActionResult> Index()
         {
@@ -77,14 +79,45 @@ namespace WebApplication2.Areas.Admin.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Create(Product product)
+        public async Task<IActionResult> Create(CreateProductVm vm)
         {
 
             if (!ModelState.IsValid)
             {
-                return View(product);
+                return View(vm);
             }
-            product.CreatedDate = DateTime.Now;
+
+
+            if (vm.Image.ContentType.Contains("Image"))
+            {
+                ModelState.AddModelError("Image", "Yalniz sekil formatinda data daxil etmelisiniz.");
+                return View(vm);
+            }
+
+            if (vm.Image.Length > 2 * 1024 * 1024)
+            {
+                ModelState.AddModelError("Image", "Max size 2mb olmalidir.");
+                return View(vm);
+            }
+
+            string uniqueImageName = Guid.NewGuid().ToString() + vm.Image.FileName;
+            string imagePath = Path.Combine(environment.WebRootPath, "assets", "images", uniqueImageName);
+
+            using FileStream mainStream = new FileStream(imagePath, FileMode.Create);
+
+            await vm.Image.CopyToAsync(mainStream);
+
+
+
+            Product product = new Product
+            {
+                Name = vm.Name,
+                Price = vm.Price,
+                ImageName = uniqueImageName,
+                ImageUrl = "/images/" + vm.Image.FileName,
+                CreatedDate = DateTime.UtcNow,
+                IsDeleted = false
+            };
 
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();

@@ -1,12 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using WebApplication2.Context;
 
 namespace WebApplication2.Controllers
 {
-    public class BlogController : Controller
+    public class BlogController(AppDbContext context) : Controller
     {
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var blogs = await context.Blogs.Include(b=>b.Employee).ToListAsync();
+            return View(blogs);
         }
     }
 }
+
+

@@ -1,10 +1,10 @@
-﻿@model Product
+﻿@model CreateProductVm
 
 
 
 <div class="container">
 	<div class="row">
-		<form method="post" asp-action="Create" asp-controller="Product">
+		<form method="post" asp-action="Create" asp-controller="Product" enctype="multipart/form-data">
 			<div class="form-group">
 				<label for="Name">Name</label>
 				<input asp-for="Name" class="form-control" id="Name" placeholder="Name">
@@ -16,9 +16,9 @@
 				<span asp-validation-for="Price" class="text-danger"></span>
 			</div>
 			<div class="form-group">
-				<label for="ImageName">ImageName</label>
-				<input asp-for="ImageName" class="form-control" id="ImageName" placeholder="ImageName">
-				<span asp-validation-for="ImageName" class="text-danger"> </span>
+				<label for="Image">Image</label>
+				<input asp-for="Image" class="form-control" id="Image" placeholder="Image">
+				<span asp-validation-for="Image" class="text-danger"> </span>
 			</div>
 
 

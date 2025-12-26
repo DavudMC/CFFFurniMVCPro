@@ -814,7 +814,13 @@ wwwroot\admin\assets\vendors\typeahead.js\typeahead.bundle.min.js
 wwwroot\assets\css\bootstrap.min.css
 wwwroot\assets\css\style.css
 wwwroot\assets\css\tiny-slider.css
+wwwroot\assets\images\64d41885-4702-46fb-b01d-d4dfebd0d868images (1).jfif
+wwwroot\assets\images\75a2d4d2-0017-4551-bf45-5c88fd8c0febimages (1).jfif
+wwwroot\assets\images\8e823599-379d-4457-883d-c74335700a27post-2.jpg
+wwwroot\assets\images\91cf9c65-1f13-4f50-99ab-f2c4ab98ed3dimages (1).jfif
+wwwroot\assets\images\b47b3358-33e6-435a-90a8-45c5193dc08eimages (1).jfif
 wwwroot\assets\images\bag.svg
+wwwroot\assets\images\bb4ab87a-ee77-412e-a6af-912046db7304images (1).jfif
 wwwroot\assets\images\bowl-2.png
 wwwroot\assets\images\bowl-3.png
 wwwroot\assets\images\cart.svg

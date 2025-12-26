@@ -1,10 +1,10 @@
-﻿@model Blog
+﻿@model CreateBlogVm
 
 
 
 <div class="container">
 	<div class="row">
-		<form method="post" asp-action="Create" asp-controller="Blog">
+		<form method="post" asp-action="Create" asp-controller="Blog" enctype="multipart/form-data">
 			<div class="form-group">
 				<label for="Title">Title</label>
 				<input asp-for="Title" class="form-control" id="Title" placeholder="Title">
@@ -16,9 +16,9 @@
 				<span asp-validation-for="Text" class="text-danger"></span>
 			</div>
 			<div class="form-group">
-				<label for="ImageName">ImageName</label>
-				<input asp-for="ImageName" class="form-control" id="ImageName" placeholder="ImageName">
-				<span asp-validation-for="ImageName" class="text-danger"> </span>
+				<label for="Image">Image</label>
+				<input asp-for="Image" class="form-control" id="Image" placeholder="Image">
+				<span asp-validation-for="Image" class="text-danger"> </span>
 			</div>
 			<div class="form-group">
 				<label for="PostedDate">PostedDate</label>
