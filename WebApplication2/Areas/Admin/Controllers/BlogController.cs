@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication2.Context;
+using WebApplication2.Helper;
 using WebApplication2.Models;
 using WebApplication2.ViewModels.BlogViewModel;
 
@@ -13,7 +14,7 @@ namespace WebApplication2.Areas.Admin.Controllers
     {
         public async Task<IActionResult> Index()
         {
-            var blogs = await context.Blogs.Include(x=>x.Employee).ToListAsync();
+            var blogs = await context.Blogs.Include(x => x.Employee).ToListAsync();
 
             return View(blogs);
         }
@@ -45,13 +46,24 @@ namespace WebApplication2.Areas.Admin.Controllers
             var employees = await context.Employees.ToListAsync();
             ViewBag.Employees = employees;
 
-            return View(product);
+            UpdateBlogVm vm = new UpdateBlogVm
+            {
+                Id = product.Id,
+                Title = product.Title,
+                Text = product.Text,
+                PostedDate = product.PostedDate,
+                EmployeeId = product.EmployeeId,
+                ImageName = product.ImageName
+            };
+
+
+            return View(vm);
 
         }
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public async Task<IActionResult> Update(Blog blog)
+        public async Task<IActionResult> Update(UpdateBlogVm vm)
         {
             if (!ModelState.IsValid)
             {
@@ -59,17 +71,45 @@ namespace WebApplication2.Areas.Admin.Controllers
                 ViewBag.Employees = employees;
                 return View();
             }
-            var existingBlog = await context.Blogs.FindAsync(blog.Id);
+
+            if (!vm.Image?.CheckType() ?? false)
+            {
+                ModelState.AddModelError("Image", "Yalniz sekil formatinda data daxil etmelisiniz.");
+                return View(vm);
+            }
+
+            if (vm.Image?.CheckSize(2) ?? false)
+            {
+                ModelState.AddModelError("Image", "Max size 2mb olmalidir.");
+                return View(vm);
+            }
+
+            var existingBlog = await context.Blogs.FindAsync(vm.Id);
             if (existingBlog == null)
             {
                 return NotFound();
             }
-            existingBlog.Title = blog.Title;
-            existingBlog.Text = blog.Text;
+
+            string folderPath = Path.Combine(enviroment.WebRootPath, "assets", "images");
+
+            if (vm.Image is { })
+            {
+                string uniqueIMageName = await vm.Image.GenerateFileName(folderPath);
+
+                string oldImagePath = Path.Combine(folderPath, existingBlog.ImageName);
+
+                ExtensionMethod.DeleteFile(oldImagePath);
+
+                existingBlog.ImageName = uniqueIMageName;
+
+            }
+
+
+            existingBlog.Title = vm.Title;
+            existingBlog.Text = vm.Text;
             existingBlog.UpdatedDate = DateTime.Now;
-            existingBlog.PostedDate = blog.PostedDate;
-            existingBlog.EmployeeId = blog.EmployeeId;
-            existingBlog.ImageName = blog.ImageName;
+            existingBlog.PostedDate = vm.PostedDate;
+            existingBlog.EmployeeId = vm.EmployeeId;
             context.Blogs.Update(existingBlog);
             await context.SaveChangesAsync();
             return RedirectToAction("Index");
@@ -82,9 +122,7 @@ namespace WebApplication2.Areas.Admin.Controllers
         {
             var blogs = await context.Blogs.ToListAsync();
 
-            var employees = await context.Employees.ToListAsync();
-
-            ViewBag.Employees = employees;
+            await GetEmployeeWithViewBag();
 
             return View();
         }
@@ -100,17 +138,34 @@ namespace WebApplication2.Areas.Admin.Controllers
                 return View();
             }
 
-            if (vm.Image.ContentType.Contains("Image"))
+
+            foreach(var tagId in vm.TagIds)
+            {
+                var IsExistTagId = await context.Tags.AnyAsync(x => x.Id == tagId);
+
+                if (!IsExistTagId)
+                {
+                    await GetEmployeeWithViewBag();
+                    ModelState.AddModelError("TagIds", "Bele bir tag movcud deil! ");
+                    return View();
+                }
+
+            }
+
+
+            if (!vm.Image.ContentType.Contains("image"))
             {
                 ModelState.AddModelError("Image", "Please select image file");
                 return View();
             }
 
-            if(vm.Image.Length > 2 *1024 * 1024)
+            if (vm.Image.Length > 2 * 1024 * 1024)
             {
                 ModelState.AddModelError("Image", "Image size must be less than 2MB");
                 return View();
             }
+
+
 
             string uniqueImageName = Guid.NewGuid().ToString() + vm.Image.FileName;
             var imagePath = Path.Combine(enviroment.WebRootPath, "assets", "images", uniqueImageName);
@@ -128,7 +183,21 @@ namespace WebApplication2.Areas.Admin.Controllers
                 ImageName = uniqueImageName,
                 CreatedDate = DateTime.Now,
                 ImageUrl = imagePath,
+                BlogTags = []
             };
+
+
+            foreach (var tagId in vm.TagIds)
+            {
+                BlogTag blogTag = new()
+                {
+                    TagId = tagId,
+                    Blog = blog
+                };
+
+                blog.BlogTags.Add(blogTag);
+
+            }
 
             blog.CreatedDate = DateTime.Now;
             await context.Blogs.AddAsync(blog);
@@ -139,7 +208,12 @@ namespace WebApplication2.Areas.Admin.Controllers
         private async Task GetEmployeeWithViewBag()
         {
             var employees = await context.Employees.ToListAsync();
+
+            var tags = await context.Tags.ToListAsync();
+
             ViewBag.Employees = employees;
+
+            ViewBag.Tags = tags;
         }
     }
 }

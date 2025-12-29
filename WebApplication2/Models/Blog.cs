@@ -17,6 +17,7 @@ namespace WebApplication2.Models
         [Required]
         public string ImageName { get; set; }
         public string? ImageUrl { get; set; }
+        public ICollection<BlogTag> BlogTags { get; set; }
 
 
     }

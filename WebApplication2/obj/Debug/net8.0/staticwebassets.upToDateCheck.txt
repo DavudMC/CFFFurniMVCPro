@@ -814,10 +814,11 @@ wwwroot\admin\assets\vendors\typeahead.js\typeahead.bundle.min.js
 wwwroot\assets\css\bootstrap.min.css
 wwwroot\assets\css\style.css
 wwwroot\assets\css\tiny-slider.css
+wwwroot\assets\images\3c5b3b94-8260-4bf4-b0c5-12d7a95c637e_images.jfif
+wwwroot\assets\images\55dd1e22-22c4-4817-9b74-ac3483dd6e41_images.jfif
 wwwroot\assets\images\64d41885-4702-46fb-b01d-d4dfebd0d868images (1).jfif
 wwwroot\assets\images\75a2d4d2-0017-4551-bf45-5c88fd8c0febimages (1).jfif
-wwwroot\assets\images\8e823599-379d-4457-883d-c74335700a27post-2.jpg
-wwwroot\assets\images\91cf9c65-1f13-4f50-99ab-f2c4ab98ed3dimages (1).jfif
+wwwroot\assets\images\a6f61108-825c-4d1d-9456-9614c68fedc1_images.jfif
 wwwroot\assets\images\b47b3358-33e6-435a-90a8-45c5193dc08eimages (1).jfif
 wwwroot\assets\images\bag.svg
 wwwroot\assets\images\bb4ab87a-ee77-412e-a6af-912046db7304images (1).jfif
@@ -831,7 +832,6 @@ wwwroot\assets\images\dots-light.svg
 wwwroot\assets\images\dots-yellow.svg
 wwwroot\assets\images\envelope-outline.svg
 wwwroot\assets\images\img-grid-1.jpg
-wwwroot\assets\images\img-grid-2.jpg
 wwwroot\assets\images\img-grid-3.jpg
 wwwroot\assets\images\person-1.jpg
 wwwroot\assets\images\person-1.png
@@ -855,3 +855,7 @@ wwwroot\assets\js\bootstrap.bundle.min.js
 wwwroot\assets\js\custom.js
 wwwroot\assets\js\tiny-slider.js
 wwwroot\assets\scss\style.scss
+wwwroot\assets\images\05a65eff-bc7e-491c-a3f6-425595b57547Screenshot 2025-11-24 142413.png
+wwwroot\assets\images\4400f81c-933c-4787-8ba2-210ec2743246Screenshot 2025-11-24 142413.png
+wwwroot\assets\images\6edc428a-925f-4be5-9ea8-bfbad9e51ae7Screenshot 2025-11-24 142413.png
+wwwroot\assets\images\8d068b00-ea5b-40b5-a99b-478dbdbcab9bScreenshot 2025-11-24 142413.png

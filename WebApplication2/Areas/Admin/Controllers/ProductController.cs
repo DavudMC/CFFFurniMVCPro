@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication2.Context;
+using WebApplication2.Helper;
 using WebApplication2.Models;
 using WebApplication2.ViewModels.ProductViewModel;
 
@@ -40,28 +41,64 @@ namespace WebApplication2.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            return View(product);
+
+            UpdateProductVm vm = new UpdateProductVm
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Price = product.Price,
+                ImagePath = product.ImageName
+            };
+
+
+            return View(vm);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(Product product)
+        public async Task<IActionResult> Update(UpdateProductVm vm)
         {
             if (!ModelState.IsValid)
             {
                 return View();
             }
 
-            var existingProduct = await _context.Products.FindAsync(product.Id);
+            if (!vm.Image?.CheckType() ?? false)
+            {
+                ModelState.AddModelError("Image", "Yalniz sekil formatinda data daxil etmelisiniz.");
+                return View(vm);
+            }
+
+            if (vm.Image?.CheckSize(2) ?? false)
+            {
+                ModelState.AddModelError("Image", "Max size 2mb olmalidir.");
+                return View(vm);
+            }
+
+
+            var existingProduct = await _context.Products.FindAsync(vm.Id);
             if (existingProduct == null)
             {
                 return NotFound();
             }
 
-            existingProduct.Name = product.Name;
-            existingProduct.Price = product.Price;
-            existingProduct.ImageName = product.ImageName;
-            existingProduct.ImageUrl = product.ImageUrl;
+            existingProduct.Name = vm.Name;
+            existingProduct.Price = vm.Price;
             existingProduct.UpdatedDate = DateTime.UtcNow;
+
+            string folderPath = Path.Combine(environment.WebRootPath, "assets", "images");
+
+            if (vm.Image is { })
+            {
+                string uniqueImageName = await vm.Image.GenerateFileName(folderPath);
+
+                string existingFilePath = Path.Combine(folderPath, existingProduct.ImageName);
+
+                ExtensionMethod.DeleteFile(existingFilePath);
+
+                existingProduct.ImageName = uniqueImageName;
+            }
+
+
             _context.Products.Update(existingProduct);
 
             await _context.SaveChangesAsync();
@@ -88,7 +125,7 @@ namespace WebApplication2.Areas.Admin.Controllers
             }
 
 
-            if (vm.Image.ContentType.Contains("Image"))
+            if (!vm.Image.ContentType.Contains("image"))
             {
                 ModelState.AddModelError("Image", "Yalniz sekil formatinda data daxil etmelisiniz.");
                 return View(vm);

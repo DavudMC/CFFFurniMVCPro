@@ -16,6 +16,8 @@ namespace WebApplication2.Context
         public DbSet<Models.Employee> Employees { get; set; }
         public DbSet<Models.Blog> Blogs { get; set; }
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<BlogTag> BlogTags { get; set; }
 
     }
 }
