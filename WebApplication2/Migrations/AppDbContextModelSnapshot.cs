@@ -41,6 +41,7 @@ namespace WebApplication2.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("PostedDate")
@@ -61,7 +62,7 @@ namespace WebApplication2.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.ToTable("Blogs", (string)null);
+                    b.ToTable("Blogs");
                 });
 
             modelBuilder.Entity("WebApplication2.Models.BlogTag", b =>
@@ -90,7 +91,7 @@ namespace WebApplication2.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("BlogTag", (string)null);
+                    b.ToTable("BlogTags");
                 });
 
             modelBuilder.Entity("WebApplication2.Models.Customer", b =>
@@ -121,7 +122,7 @@ namespace WebApplication2.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers", (string)null);
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("WebApplication2.Models.Employee", b =>
@@ -164,7 +165,36 @@ namespace WebApplication2.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Employees", (string)null);
+                    b.ToTable("Employees");
+                });
+
+            modelBuilder.Entity("WebApplication2.Models.EmployeeService", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ServiceId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("ServiceId");
+
+                    b.ToTable("EmployeeServices");
                 });
 
             modelBuilder.Entity("WebApplication2.Models.Product", b =>
@@ -200,7 +230,41 @@ namespace WebApplication2.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("WebApplication2.Models.Service", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Services");
                 });
 
             modelBuilder.Entity("WebApplication2.Models.Tag", b =>
@@ -223,7 +287,7 @@ namespace WebApplication2.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tag", (string)null);
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("WebApplication2.Models.Blog", b =>
@@ -256,9 +320,38 @@ namespace WebApplication2.Migrations
                     b.Navigation("Tag");
                 });
 
+            modelBuilder.Entity("WebApplication2.Models.EmployeeService", b =>
+                {
+                    b.HasOne("WebApplication2.Models.Employee", "Employee")
+                        .WithMany("EmployeeServices")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApplication2.Models.Service", "Service")
+                        .WithMany("EmployeeServices")
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("Service");
+                });
+
             modelBuilder.Entity("WebApplication2.Models.Blog", b =>
                 {
                     b.Navigation("BlogTags");
+                });
+
+            modelBuilder.Entity("WebApplication2.Models.Employee", b =>
+                {
+                    b.Navigation("EmployeeServices");
+                });
+
+            modelBuilder.Entity("WebApplication2.Models.Service", b =>
+                {
+                    b.Navigation("EmployeeServices");
                 });
 
             modelBuilder.Entity("WebApplication2.Models.Tag", b =>

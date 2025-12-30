@@ -11,5 +11,6 @@ namespace WebApplication2.ViewModels.BlogViewModel
         public DateTime? PostedDate { get; set; }
         public IFormFile? Image { get; set; }
         public string? ImageName { get; set; }
+        public List<int> TagIds { get; set; } = [];
     }
 }

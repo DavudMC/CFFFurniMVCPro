@@ -89,7 +89,7 @@ namespace WebApplication2.Areas.Admin.Controllers
 
             if (vm.Image is { })
             {
-                string uniqueImageName = await vm.Image.GenerateFileName(folderPath);
+                string uniqueImageName = await vm.Image.SaveFileAsync(folderPath);
 
                 string existingFilePath = Path.Combine(folderPath, existingProduct.ImageName);
 
@@ -109,8 +109,9 @@ namespace WebApplication2.Areas.Admin.Controllers
 
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            
             return View();
         }
 
@@ -125,13 +126,13 @@ namespace WebApplication2.Areas.Admin.Controllers
             }
 
 
-            if (!vm.Image.ContentType.Contains("image"))
+            if (!vm.Image.CheckType())
             {
                 ModelState.AddModelError("Image", "Yalniz sekil formatinda data daxil etmelisiniz.");
                 return View(vm);
             }
 
-            if (vm.Image.Length > 2 * 1024 * 1024)
+            if (vm.Image.CheckSize(2))
             {
                 ModelState.AddModelError("Image", "Max size 2mb olmalidir.");
                 return View(vm);

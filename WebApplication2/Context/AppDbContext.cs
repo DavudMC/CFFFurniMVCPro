@@ -12,12 +12,14 @@ namespace WebApplication2.Context
             
         }
 
-        public DbSet<Models.Product> Products { get; set; }
-        public DbSet<Models.Employee> Employees { get; set; }
-        public DbSet<Models.Blog> Blogs { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<Blog> Blogs { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<BlogTag> BlogTags { get; set; }
+        public DbSet<Service> Services { get; set; }
+        public DbSet<EmployeeService> EmployeeServices { get; set; }
 
     }
 }

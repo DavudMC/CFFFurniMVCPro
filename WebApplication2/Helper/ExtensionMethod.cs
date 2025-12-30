@@ -10,12 +10,12 @@ namespace WebApplication2.Helper
             return file.ContentType.Contains(type);
         }
 
-        public static bool CheckSize(this IFormFile file, int mb)
+        public static bool CheckSize(this IFormFile file,int mb)
         {
             return file.Length > mb * 1024 * 1024;
         }
 
-        public static async Task<string> GenerateFileName(this IFormFile file, string folderPath)
+        public static async Task<string> SaveFileAsync(this IFormFile file, string folderPath)
         {
             var uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
 

@@ -814,11 +814,20 @@ wwwroot\admin\assets\vendors\typeahead.js\typeahead.bundle.min.js
 wwwroot\assets\css\bootstrap.min.css
 wwwroot\assets\css\style.css
 wwwroot\assets\css\tiny-slider.css
+wwwroot\assets\images\05a65eff-bc7e-491c-a3f6-425595b57547Screenshot 2025-11-24 142413.png
+wwwroot\assets\images\31b24d66-2d5e-44b5-a8e4-f2cf29f8b73dScreenshot (103).png
+wwwroot\assets\images\3b83fc78-1d19-47dc-acde-cf07e43e592fScreenshot (82).png
 wwwroot\assets\images\3c5b3b94-8260-4bf4-b0c5-12d7a95c637e_images.jfif
+wwwroot\assets\images\4400f81c-933c-4787-8ba2-210ec2743246Screenshot 2025-11-24 142413.png
 wwwroot\assets\images\55dd1e22-22c4-4817-9b74-ac3483dd6e41_images.jfif
+wwwroot\assets\images\631b6d28-cdd4-4f19-a627-3f607bedec26Screenshot (81).png
 wwwroot\assets\images\64d41885-4702-46fb-b01d-d4dfebd0d868images (1).jfif
+wwwroot\assets\images\65a6b483-9cc2-4965-8f9c-c27a8a7d8d59Screenshot (81).png
+wwwroot\assets\images\6edc428a-925f-4be5-9ea8-bfbad9e51ae7Screenshot 2025-11-24 142413.png
 wwwroot\assets\images\75a2d4d2-0017-4551-bf45-5c88fd8c0febimages (1).jfif
+wwwroot\assets\images\8d068b00-ea5b-40b5-a99b-478dbdbcab9bScreenshot 2025-11-24 142413.png
 wwwroot\assets\images\a6f61108-825c-4d1d-9456-9614c68fedc1_images.jfif
+wwwroot\assets\images\a734c612-f1af-4b6b-82ad-704e6ee8cca4Screenshot 2025-11-24 142413.png
 wwwroot\assets\images\b47b3358-33e6-435a-90a8-45c5193dc08eimages (1).jfif
 wwwroot\assets\images\bag.svg
 wwwroot\assets\images\bb4ab87a-ee77-412e-a6af-912046db7304images (1).jfif
@@ -831,6 +840,8 @@ wwwroot\assets\images\dots-green.svg
 wwwroot\assets\images\dots-light.svg
 wwwroot\assets\images\dots-yellow.svg
 wwwroot\assets\images\envelope-outline.svg
+wwwroot\assets\images\f27efffd-1a2c-498e-b704-e4a8e42723b1Screenshot (84).png
+wwwroot\assets\images\f2b530ed-e7ea-44b4-b5c0-3406cf12e6e3Screenshot (81).png
 wwwroot\assets\images\img-grid-1.jpg
 wwwroot\assets\images\img-grid-3.jpg
 wwwroot\assets\images\person-1.jpg
@@ -855,7 +866,3 @@ wwwroot\assets\js\bootstrap.bundle.min.js
 wwwroot\assets\js\custom.js
 wwwroot\assets\js\tiny-slider.js
 wwwroot\assets\scss\style.scss
-wwwroot\assets\images\05a65eff-bc7e-491c-a3f6-425595b57547Screenshot 2025-11-24 142413.png
-wwwroot\assets\images\4400f81c-933c-4787-8ba2-210ec2743246Screenshot 2025-11-24 142413.png
-wwwroot\assets\images\6edc428a-925f-4be5-9ea8-bfbad9e51ae7Screenshot 2025-11-24 142413.png
-wwwroot\assets\images\8d068b00-ea5b-40b5-a99b-478dbdbcab9bScreenshot 2025-11-24 142413.png

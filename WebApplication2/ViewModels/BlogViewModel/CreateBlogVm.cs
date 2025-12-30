@@ -16,5 +16,6 @@ namespace WebApplication2.ViewModels.BlogViewModel
         [Required]
         public IFormFile Image { get; set; }
         public List<int> TagIds { get; set; }
+        
     }
 }

@@ -10,24 +10,24 @@ using WebApplication2.ViewModels.BlogViewModel;
 namespace WebApplication2.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class BlogController(AppDbContext context, IWebHostEnvironment enviroment) : Controller
+    public class BlogController(AppDbContext _context, IWebHostEnvironment _enviroment) : Controller
     {
         public async Task<IActionResult> Index()
         {
-            var blogs = await context.Blogs.Include(x => x.Employee).ToListAsync();
+            var blogs = await _context.Blogs.Include(x => x.Employee).ToListAsync();
 
             return View(blogs);
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            var blog = await context.Blogs.FindAsync(id);
+            var blog = await _context.Blogs.FindAsync(id);
             if (blog == null)
             {
                 return NotFound();
             }
-            context.Blogs.Remove(blog);
-            await context.SaveChangesAsync();
+            _context.Blogs.Remove(blog);
+            await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
@@ -36,14 +36,14 @@ namespace WebApplication2.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
-            var product = await context.Blogs.FindAsync(id);
+            var product = await _context.Blogs.FindAsync(id);
 
             if (product == null)
             {
                 return NotFound();
             }
 
-            var employees = await context.Employees.ToListAsync();
+            var employees = await _context.Employees.ToListAsync();
             ViewBag.Employees = employees;
 
             UpdateBlogVm vm = new UpdateBlogVm
@@ -53,7 +53,8 @@ namespace WebApplication2.Areas.Admin.Controllers
                 Text = product.Text,
                 PostedDate = product.PostedDate,
                 EmployeeId = product.EmployeeId,
-                ImageName = product.ImageName
+                ImageName = product.ImageName,
+                TagIds = product.BlogTags.Select(x=>x.TagId).ToList()
             };
 
 
@@ -67,7 +68,7 @@ namespace WebApplication2.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var employees = await context.Employees.ToListAsync();
+                var employees = await _context.Employees.ToListAsync();
                 ViewBag.Employees = employees;
                 return View();
             }
@@ -84,17 +85,27 @@ namespace WebApplication2.Areas.Admin.Controllers
                 return View(vm);
             }
 
-            var existingBlog = await context.Blogs.FindAsync(vm.Id);
+            var existingBlog = await _context.Blogs.Include(x=>x.BlogTags).FirstOrDefaultAsync(x=>x.Id == vm.Id);
             if (existingBlog == null)
             {
-                return NotFound();
+                return BadRequest();
+            }
+            foreach(var tagId in vm.TagIds)
+            {
+                var isexisttagId = await _context.Tags.AnyAsync(x=>x.Id == tagId);
+                if(!isexisttagId)
+                {
+                    await GetEmployeeWithViewBag();
+                    ModelState.AddModelError("TagIds", "Bele bir tag movcud deyil.");
+                    return View(vm);
+                }
             }
 
-            string folderPath = Path.Combine(enviroment.WebRootPath, "assets", "images");
+            string folderPath = Path.Combine(_enviroment.WebRootPath, "assets", "images");
 
             if (vm.Image is { })
             {
-                string uniqueIMageName = await vm.Image.GenerateFileName(folderPath);
+                string uniqueIMageName = await vm.Image.SaveFileAsync(folderPath);
 
                 string oldImagePath = Path.Combine(folderPath, existingBlog.ImageName);
 
@@ -110,8 +121,8 @@ namespace WebApplication2.Areas.Admin.Controllers
             existingBlog.UpdatedDate = DateTime.Now;
             existingBlog.PostedDate = vm.PostedDate;
             existingBlog.EmployeeId = vm.EmployeeId;
-            context.Blogs.Update(existingBlog);
-            await context.SaveChangesAsync();
+            _context.Blogs.Update(existingBlog);
+            await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
@@ -120,7 +131,7 @@ namespace WebApplication2.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var blogs = await context.Blogs.ToListAsync();
+            var blogs = await _context.Blogs.ToListAsync();
 
             await GetEmployeeWithViewBag();
 
@@ -141,7 +152,7 @@ namespace WebApplication2.Areas.Admin.Controllers
 
             foreach(var tagId in vm.TagIds)
             {
-                var IsExistTagId = await context.Tags.AnyAsync(x => x.Id == tagId);
+                var IsExistTagId = await _context.Tags.AnyAsync(x => x.Id == tagId);
 
                 if (!IsExistTagId)
                 {
@@ -153,13 +164,13 @@ namespace WebApplication2.Areas.Admin.Controllers
             }
 
 
-            if (!vm.Image.ContentType.Contains("image"))
+            if (!vm.Image.CheckType())
             {
                 ModelState.AddModelError("Image", "Please select image file");
                 return View();
             }
 
-            if (vm.Image.Length > 2 * 1024 * 1024)
+            if (vm.Image.CheckSize(2))
             {
                 ModelState.AddModelError("Image", "Image size must be less than 2MB");
                 return View();
@@ -168,7 +179,7 @@ namespace WebApplication2.Areas.Admin.Controllers
 
 
             string uniqueImageName = Guid.NewGuid().ToString() + vm.Image.FileName;
-            var imagePath = Path.Combine(enviroment.WebRootPath, "assets", "images", uniqueImageName);
+            var imagePath = Path.Combine(_enviroment.WebRootPath, "assets", "images", uniqueImageName);
 
             using var stream = new FileStream(imagePath, FileMode.Create);
             await vm.Image.CopyToAsync(stream);
@@ -200,16 +211,16 @@ namespace WebApplication2.Areas.Admin.Controllers
             }
 
             blog.CreatedDate = DateTime.Now;
-            await context.Blogs.AddAsync(blog);
-            await context.SaveChangesAsync();
+            await _context.Blogs.AddAsync(blog);
+            await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
         private async Task GetEmployeeWithViewBag()
         {
-            var employees = await context.Employees.ToListAsync();
+            var employees = await _context.Employees.ToListAsync();
 
-            var tags = await context.Tags.ToListAsync();
+            var tags = await _context.Tags.ToListAsync();
 
             ViewBag.Employees = employees;
 

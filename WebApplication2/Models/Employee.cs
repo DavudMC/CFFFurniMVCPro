@@ -10,6 +10,7 @@ namespace WebApplication2.Models
         public string Description { get; set; }
         public string ImageName { get; set; }
         public string ImageUrl { get; set; }
+        public ICollection<EmployeeService> EmployeeServices { get; set; } = [];
 
     }
 }

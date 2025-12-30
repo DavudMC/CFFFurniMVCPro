@@ -13,10 +13,8 @@ namespace WebApplication2.Models
         public Employee? Employee { get; set; }
         public int EmployeeId { get; set; }
         public DateTime? PostedDate { get; set; }
-
-        [Required]
         public string ImageName { get; set; }
-        public string? ImageUrl { get; set; }
+        public string ImageUrl { get; set; }
         public ICollection<BlogTag> BlogTags { get; set; }
 
 
